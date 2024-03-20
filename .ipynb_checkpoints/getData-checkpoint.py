@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 
-class Dataset(Dataset):
+class TrainValDataset(Dataset):
     def __init__(self):
         self.imgs_path = "Training/"
         file_list = glob.glob(self.imgs_path + "*")
@@ -19,7 +19,7 @@ class Dataset(Dataset):
         self.img_dim = (254, 254)
     def __len__(self):
         return len(self.data)
-    def __getitem__(self, idx):
+    def __getitems__(self, idx):
         img_path, class_name = self.data[idx]
         img = cv2.imread(img_path)
         img = cv2.resize(img, self.img_dim)
@@ -44,7 +44,7 @@ class TestDataset(Dataset):
         self.img_dim = (254, 254)
     def __len__(self):
         return len(self.data)
-    def __getitem__(self, idx):
+    def __getitems__(self, idx):
         img_path, class_name = self.data[idx]
         img = cv2.imread(img_path)
         img = cv2.resize(img, self.img_dim)

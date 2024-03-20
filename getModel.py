@@ -10,7 +10,7 @@ np.random.seed(SEED)
 
 class eeModel(nn.Module):
 
-    def __init__(self, num_classes=2, input_dim = 256):
+    def __init__(self, num_classes=2, input_dim = 3):
         super(eeModel, self).__init__()
         
         self.baseModel = None
@@ -109,7 +109,7 @@ class eeModel(nn.Module):
         return size_all_mb
 
 
-class blModel(eeModel):
+class blModel(nn.Module):
 
     def __init__(self, num_classes=2, input_dim = 3):
         super(blModel, self).__init__()
@@ -141,14 +141,11 @@ class blModel(eeModel):
 
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(in_features=512, out_features=num_classes),
+            nn.Linear(in_features=504, out_features=num_classes),
             nn.Sigmoid()
 
         )
 
-
-
-    
                 
     def forward(self, X):
         X = self.baseModel(X)
