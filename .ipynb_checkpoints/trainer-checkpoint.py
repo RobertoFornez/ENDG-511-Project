@@ -43,10 +43,9 @@ class blHandler():
             self.net.train()
             for i, data in enumerate(tLoader, 0):
                 inputs, labels = data[0].to(self.device), data[1].to(self.device)
-                inputs = inputs.float()
                 self.optimizer.zero_grad()
                 output = self.net(inputs)
-                loss = self.criterion(output, labels.squeeze())
+                loss = self.criterion(output, labels)
                 totalLoss += loss.item()
                 loss.backward()
     
@@ -71,9 +70,8 @@ class blHandler():
                     self.net.eval()
                     for i, data in enumerate(vLoader, 0):
                         inputs, labels = data[0].to(self.device), data[1].to(self.device)
-                        inputs = inputs.float()
                         output = self.net(inputs)
-                        loss = self.criterion(output, labels.squeeze())
+                        loss = self.criterion(output, labels)
 
                         valLoss += loss.item()
 
@@ -121,12 +119,12 @@ class blHandler():
         with torch.no_grad():
             self.net.eval()
             for inputs, gTruth in sLoader:
-                inputs, gTruth = inputs.to(self.device), gTruth.to(self.device)
+                inputs, gTruth = inputs.to(self.device), gTruth.to(self.device)  
                 outputs = self.net(inputs)
 
                 _, preds = torch.max(outputs, 1)
                 predicted.append(preds)
-                loss = self.criterion(outputs, gTruth.long())
+                loss = self.criterion(outputs, gTruth)
                 tLoss += loss.item()
                 acc += accuracy_score(gTruth.detach().cpu().numpy(), preds.detach().cpu().numpy())
 

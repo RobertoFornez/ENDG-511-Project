@@ -115,7 +115,7 @@ class blModel(nn.Module):
         super(blModel, self).__init__()
         
         self.baseModel = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3,stride = 1,padding='same'),
+            nn.Conv2d(in_channels=input_dim, out_channels=8, kernel_size=3,stride = 1,padding="same"),
             nn.BatchNorm2d(8),
             nn.ReLU(inplace=True)
             
@@ -132,24 +132,35 @@ class blModel(nn.Module):
             nn.BatchNorm2d(8),
             nn.ReLU(inplace=True),
 
-            nn.MaxPool2d(kernel_size=2, stride=2, padding = 0),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding = 1),
             
+
+        )
+
+        self.addBranch = nn.Sequential(
+            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=1, stride = 2)
+        )
+
+        self.denseOut = nn.Sequential(
             nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3,padding='same'),
             nn.BatchNorm2d(8),
             nn.ReLU(inplace=True),
- 
-
+            
             nn.Flatten(),
             nn.Dropout(0.5),
             nn.Linear(in_features=129032, out_features=num_classes),
             nn.Sigmoid()
-
         )
 
                 
     def forward(self, X):
+        X = X *1
         X = self.baseModel(X)
-        X = self.longBranch(X)     
+        residual = X
+        residual = self.addBranch(residual)
+        X = self.longBranch(X)
+        X = X + residual
+        X =  self.denseOut(X)
         return X
     
 
