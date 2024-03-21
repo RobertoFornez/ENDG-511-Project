@@ -141,7 +141,7 @@ class blModel(nn.Module):
 
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(in_features=504, out_features=num_classes),
+            nn.Linear(in_features=129032, out_features=num_classes),
             nn.Sigmoid()
 
         )

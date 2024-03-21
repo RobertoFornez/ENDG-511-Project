@@ -43,10 +43,10 @@ class blHandler():
             self.net.train()
             for i, data in enumerate(tLoader, 0):
                 inputs, labels = data[0].to(self.device), data[1].to(self.device)
-
+                inputs = inputs.float()
                 self.optimizer.zero_grad()
                 output = self.net(inputs)
-                loss = self.criterion(output, labels.long())
+                loss = self.criterion(output, labels.squeeze())
                 totalLoss += loss.item()
                 loss.backward()
     
@@ -71,8 +71,9 @@ class blHandler():
                     self.net.eval()
                     for i, data in enumerate(vLoader, 0):
                         inputs, labels = data[0].to(self.device), data[1].to(self.device)
+                        inputs = inputs.float()
                         output = self.net(inputs)
-                        loss = self.criterion(output, labels.long())
+                        loss = self.criterion(output, labels.squeeze())
 
                         valLoss += loss.item()
 
