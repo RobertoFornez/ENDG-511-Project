@@ -16,7 +16,7 @@ class TrainValDataset(Dataset):
             for img_path in glob.glob(class_path + "/*.jpg"):
                 self.data.append([img_path, class_name])
         self.class_map = {"Fire" : 1, "No_Fire": 0}
-        self.img_dim = (254, 254)
+        self.img_dim = (224, 224)
     def __len__(self):
         return len(self.data)
     def __getitem__(self, idx):
@@ -41,7 +41,7 @@ class TestDataset(Dataset):
             for img_path in glob.glob(class_path + "/*.jpg"):
                 self.data.append([img_path, class_name])
         self.class_map = {"Fire" : 1, "No_Fire": 0}
-        self.img_dim = (254, 254)
+        self.img_dim = (224, 224)
     def __len__(self):
         return len(self.data)
     def __getitem__(self, idx):

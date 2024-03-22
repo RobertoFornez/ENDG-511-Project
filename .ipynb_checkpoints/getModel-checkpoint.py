@@ -164,41 +164,41 @@ class blModel(nn.Module):
         self.longBranch = nn.Sequential(
 
             #Layer 8
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
+            #nn.Conv2d(64, 128, kernel_size=3, stride=1, padding='same'),
+            #nn.BatchNorm2d(128),
+            #nn.ReLU(),
 
             #Layer 9
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
+            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            #nn.BatchNorm2d(128),
+            #nn.ReLU(),
 
             ##Layer 10
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
+            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            #nn.BatchNorm2d(128),
+            #nn.ReLU(),
+            #nn.MaxPool2d(kernel_size = 2, stride = 2),
 
             #Layer 11
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
+            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            #nn.BatchNorm2d(128),
+            #nn.ReLU(),
 
             #Layer 12
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
+            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            #nn.BatchNorm2d(128),
+            #nn.ReLU(),
 
             ##Layer 13
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
+            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            #nn.BatchNorm2d(128),
+            #nn.ReLU(),
+            #nn.MaxPool2d(kernel_size = 2, stride = 2),
 
             #FC
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(7*7*128, 1024),
+            nn.Linear(28*28*64, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(),
             
