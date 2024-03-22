@@ -48,8 +48,8 @@ class blHandler():
                 loss = self.criterion(output, labels)
                 totalLoss += loss.item()
                 loss.backward()
-    
-                _, predicted = torch.max(output, 1)
+
+                predicted = torch.round(output)
                 acc = accuracy_score(labels.detach().cpu().numpy(), predicted.detach().cpu().numpy())
                 totalAcc += acc
                 
@@ -75,7 +75,7 @@ class blHandler():
 
                         valLoss += loss.item()
 
-                        _, predicted = torch.max(output, 1)
+                        predicted = torch.round(output)
                         acc = accuracy_score(labels.detach().cpu().numpy(), predicted.detach().cpu().numpy())
 
                         valAcc += acc 
@@ -122,7 +122,7 @@ class blHandler():
                 inputs, gTruth = inputs.to(self.device), gTruth.to(self.device)  
                 outputs = self.net(inputs)
 
-                _, preds = torch.max(outputs, 1)
+                preds = torch.round(outputs)
                 predicted.append(preds)
                 loss = self.criterion(outputs, gTruth)
                 tLoss += loss.item()
@@ -153,7 +153,7 @@ class blHandler():
                     if e <= threshold:
                         if verbose:
                             print(e)
-                        _, label = torch.max(out1, 1)
+                        label = torch.round(out1)
                         predicted.append(label)
                         if label == gTruth[iSample].item():
                             recorder[0].append(1)
@@ -162,7 +162,7 @@ class blHandler():
                             recorder[0].append(0)
                         continue
                     out2 = self.net(x[iSample:iSample+1])
-                    _, label = torch.max(out2, 1)
+                    label = torch.round(out2)
                     predicted.append(label)
                     if label == gTruth[iSample].item():
                         acc+=1

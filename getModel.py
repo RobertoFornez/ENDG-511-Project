@@ -111,56 +111,112 @@ class eeModel(nn.Module):
 
 class blModel(nn.Module):
 
-    def __init__(self, num_classes=2, input_dim = 3):
+    def __init__(self, num_classes=1, input_dim = 3):
         super(blModel, self).__init__()
         
         self.baseModel = nn.Sequential(
-            nn.Conv2d(in_channels=input_dim, out_channels=8, kernel_size=3,stride = 1,padding="same"),
-            nn.BatchNorm2d(8),
-            nn.ReLU(inplace=True)
+
+            #Layer 1
+            nn.Conv2d(in_channels=input_dim, out_channels=16, kernel_size=3,stride = 1,padding='same'),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+
+            ##Layer 2
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(16),
+            nn.ReLU(), 
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
+
+            #Layer 3
+            nn.Conv2d(16, 32, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+
+            ##Layer 4
+            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
+
+            #Layer 5
+            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+
+            #Layer 6
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+
+            ##Layer 7
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size = 2, stride = 2)
+
             
+        
+        
         )
 
         self.shortBranch = nn.Sequential()
         
         self.longBranch = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3,padding='same'),
-            nn.BatchNorm2d(8),
-            nn.ReLU(inplace=True),
-            
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3,padding='same'),
-            nn.BatchNorm2d(8),
-            nn.ReLU(inplace=True),
 
-            nn.MaxPool2d(kernel_size=3, stride=2, padding = 1),
-            
+            #Layer 8
+            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
 
-        )
+            #Layer 9
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
 
-        self.addBranch = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=1, stride = 2)
-        )
+            ##Layer 10
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
 
-        self.denseOut = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3,padding='same'),
-            nn.BatchNorm2d(8),
-            nn.ReLU(inplace=True),
-            
+            #Layer 11
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+
+            #Layer 12
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+
+            ##Layer 13
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
+
+            #FC
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(in_features=129032, out_features=num_classes),
+            nn.Linear(7*7*128, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(),
+            
+            nn.Linear(1024, 512),
+            nn.BatchNorm1d(512),
+            nn.ReLU(),
+
+            nn.Linear(512, 1),
             nn.Sigmoid()
+            
+
         )
+
 
                 
     def forward(self, X):
-        X = X *1
         X = self.baseModel(X)
-        residual = X
-        residual = self.addBranch(residual)
         X = self.longBranch(X)
-        X = X + residual
-        X =  self.denseOut(X)
         return X
     
 

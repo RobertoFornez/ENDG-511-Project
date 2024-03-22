@@ -27,7 +27,7 @@ class TrainValDataset(Dataset):
         img_tensor = torch.from_numpy(img)
         img_tensor = img_tensor.permute(2, 0, 1)
         class_id = torch.tensor([class_id])
-        return img_tensor.float(), class_id.squeeze()
+        return img_tensor.float(), class_id.float()
 
 
 class TestDataset(Dataset):
@@ -52,4 +52,4 @@ class TestDataset(Dataset):
         img_tensor = torch.from_numpy(img)
         img_tensor = img_tensor.permute(2, 0, 1)
         class_id = torch.tensor([class_id])
-        return img_tensor.float(), class_id.squeeze()
+        return img_tensor.float(), class_id.float()
