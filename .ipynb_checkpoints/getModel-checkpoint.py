@@ -10,7 +10,7 @@ np.random.seed(SEED)
 
 class eeModel(nn.Module):
 
-    def __init__(self, num_classes=2, input_dim = 3):
+    def __init__(self, num_classes=1, input_dim = 3):
         super(eeModel, self).__init__()
         
         self.baseModel = None
@@ -117,40 +117,41 @@ class blModel(nn.Module):
         self.baseModel = nn.Sequential(
 
             #Layer 1
-            nn.Conv2d(in_channels=input_dim, out_channels=16, kernel_size=3,stride = 1,padding='same'),
-            nn.BatchNorm2d(16),
+            nn.Conv2d(in_channels=input_dim, out_channels=4, kernel_size=3,stride = 1,padding='same'),
+            nn.BatchNorm2d(4),
             nn.ReLU(),
 
             ##Layer 2
-            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(16),
+            nn.Conv2d(4, 4, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(4),
             nn.ReLU(), 
             nn.MaxPool2d(kernel_size = 2, stride = 2),
 
             #Layer 3
-            nn.Conv2d(16, 32, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(4, 8, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(8),
             nn.ReLU(),
 
             ##Layer 4
-            nn.Conv2d(32, 32, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(8, 8, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(8),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size = 2, stride = 2),
 
             #Layer 5
-            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(8, 16, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
+            
 
             #Layer 6
-            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
 
             ##Layer 7
-            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding='same'),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size = 2, stride = 2)
 
@@ -198,16 +199,17 @@ class blModel(nn.Module):
             #FC
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(28*28*64, 1024),
+            nn.Linear(28*28*16, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(),
-            
+
+            nn.Dropout(0.5),
             nn.Linear(1024, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(),
 
-            nn.Linear(512, 1),
-            nn.Sigmoid()
+            nn.Linear(512, 2),
+            nn.Softmax(dim=1)
             
 
         )
@@ -219,4 +221,105 @@ class blModel(nn.Module):
         X = self.longBranch(X)
         return X
     
+
+class eeModel_V0(eeModel):
+
+    """
+        A class for the model in which the short branch is the closest to the baseModel compared to the other models.
+    """
+    def __init__(self, num_classes=1, input_dim = 3):
+        super(eeModel_V0, self).__init__()
+
+        self.baseModel = nn.Sequential(
+
+            #Layer 1
+            nn.Conv2d(in_channels=input_dim, out_channels=4, kernel_size=3,stride = 1,padding='same'),
+            nn.BatchNorm2d(4),
+            nn.ReLU(),
+
+            ##Layer 2
+            nn.Conv2d(4, 4, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(4),
+            nn.ReLU(), 
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
+
+            #Layer 3
+            nn.Conv2d(4, 8, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(8),
+            nn.ReLU(),
+
+            ##Layer 4
+            nn.Conv2d(8, 8, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(8),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size = 2, stride = 2)
+
+            
+        )
+        
+        self.shortBranch = nn.Sequential(
+
+            #FC
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
+            
+            nn.Flatten(),
+            nn.Dropout(0.5),
+            nn.Linear(28*28*8, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(),
+
+            nn.Dropout(0.5),
+            nn.Linear(1024, 512),
+            nn.BatchNorm1d(512),
+            nn.ReLU(),
+
+            
+            nn.Linear(512, 2),
+            nn.Softmax(dim=1)
+        
+        )
+        
+        self.longBranch = nn.Sequential(
+
+            #Layer 5
+            nn.Conv2d(8, 16, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+
+            #Layer 6
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+
+            ##Layer 7
+            nn.Conv2d(16, 16, kernel_size=3, stride=1, padding='same'),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size = 2, stride = 2),
+
+            #FC
+            nn.Flatten(),
+            nn.Dropout(0.5),
+            nn.Linear(28*28*16, 1024),
+            nn.BatchNorm1d(1024),
+            nn.ReLU(),
+
+            nn.Dropout(0.5),
+            nn.Linear(1024, 512),
+            nn.BatchNorm1d(512),
+            nn.ReLU(),
+
+            nn.Linear(512, 2),
+            nn.Softmax(dim=1)
+        
+        )
+   
+        self.print_summary()
+
+    def forward(self, X):    
+        X = self.baseModel(X)
+        X1 = self.shortBranch(X)
+        X2 = self.longBranch(X)
+        
+        return X1, X2
 
