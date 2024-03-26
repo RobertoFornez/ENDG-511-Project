@@ -32,6 +32,7 @@ class eeModel(nn.Module):
     
     def long_forward(self, X):
         X = self.baseModel(X)
+        _ = self.shortBranch(X)
         X = self.longBranch(X)
         return X
     
@@ -199,7 +200,7 @@ class blModel(nn.Module):
             #FC
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(28*28*16, 1024),
+            nn.Linear(31*31*16, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(),
 
@@ -264,7 +265,7 @@ class eeModel_V0(eeModel):
             
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(28*28*8, 1024),
+            nn.Linear(31*31*8, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(),
 
@@ -300,7 +301,7 @@ class eeModel_V0(eeModel):
             #FC
             nn.Flatten(),
             nn.Dropout(0.5),
-            nn.Linear(28*28*16, 1024),
+            nn.Linear(31*31*16, 1024),
             nn.BatchNorm1d(1024),
             nn.ReLU(),
 

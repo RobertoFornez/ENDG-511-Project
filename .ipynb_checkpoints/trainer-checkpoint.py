@@ -87,9 +87,11 @@ class blHandler():
 
                     self.history["validation"]["loss"].append(valLoss)
                     self.history["validation"]["accuracy"].append(valAcc)
+
             
                 print(", validLoss: {:0.3f}, validAcc: {:0.3f}"
                   .format(valLoss, valAcc))
+                
                 
                 if valLoss <= best_loss:
                     # Save the model with the lowest validation loss.
@@ -118,6 +120,7 @@ class blHandler():
         
         acc, tLoss = 0, 0
         predicted = []
+        self.net.eval()
         with torch.no_grad():
             self.net.eval()
             for inputs, gTruth in sLoader:
@@ -126,15 +129,18 @@ class blHandler():
                 outputs = self.net(inputs)
 
                 _, preds = torch.max(outputs, 1)
-                predicted.append(preds)
+                predicted.extend(preds.tolist())
                 loss = self.criterion(outputs, gTruth.long())
                 tLoss += loss.item()
                 acc += accuracy_score(gTruth.detach().cpu().numpy(), preds.detach().cpu().numpy())
 
+
             acc = acc/len(sLoader)
             tLoss = tLoss/len(sLoader)
         return predicted, acc
-    
+
+
+        
 
 
 class eeHandler():
@@ -313,7 +319,7 @@ class eeHandler():
     
     def forward_timeTest(self, sLoader, ratio=0.1):
         self.net.eval()
-        num_samples_to_select = int(ratio * 500)
+        num_samples_to_select = int(ratio * 32)
         with torch.no_grad():
             for inputs, _ in sLoader:
                 inputs = inputs.to(self.device)
