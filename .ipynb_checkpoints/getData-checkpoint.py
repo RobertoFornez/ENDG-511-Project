@@ -17,7 +17,6 @@ class TrainValDataset(Dataset):
                 self.data.append([img_path, class_name])
         self.class_map = {"Fire" : 1, "No_Fire": 0}
         self.img_dim = (254, 254)
-        #self.transform = transform
     def __len__(self):
         return len(self.data)
     def __getitem__(self, idx):
@@ -26,7 +25,6 @@ class TrainValDataset(Dataset):
         img = cv2.resize(img, self.img_dim)
         img_tensor = torch.from_numpy(img)
         img_tensor = img_tensor.permute(2, 0, 1)
-        #img_tensor = self.transform(img_tensor)
         class_id = self.class_map[class_name]
         class_id = torch.tensor([class_id])
         return img_tensor.float(), class_id.float()
