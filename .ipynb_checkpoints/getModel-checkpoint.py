@@ -4,7 +4,7 @@ import torch.nn.functional as func
 import numpy as np
 
 # Seed for reproducibility
-SEED = 25
+SEED = 120
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 
@@ -164,38 +164,6 @@ class blModel(nn.Module):
         self.shortBranch = nn.Sequential()
         
         self.longBranch = nn.Sequential(
-
-            #Layer 8
-            #nn.Conv2d(64, 128, kernel_size=3, stride=1, padding='same'),
-            #nn.BatchNorm2d(128),
-            #nn.ReLU(),
-
-            #Layer 9
-            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            #nn.BatchNorm2d(128),
-            #nn.ReLU(),
-
-            ##Layer 10
-            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            #nn.BatchNorm2d(128),
-            #nn.ReLU(),
-            #nn.MaxPool2d(kernel_size = 2, stride = 2),
-
-            #Layer 11
-            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            #nn.BatchNorm2d(128),
-            #nn.ReLU(),
-
-            #Layer 12
-            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            #nn.BatchNorm2d(128),
-            #nn.ReLU(),
-
-            ##Layer 13
-            #nn.Conv2d(128, 128, kernel_size=3, stride=1, padding='same'),
-            #nn.BatchNorm2d(128),
-            #nn.ReLU(),
-            #nn.MaxPool2d(kernel_size = 2, stride = 2),
 
             #FC
             nn.Flatten(),

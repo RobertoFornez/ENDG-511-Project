@@ -4,7 +4,7 @@ import torch.nn.functional as func
 import numpy as np
 
 # Seed for reproducibility
-SEED = 25
+SEED = 120
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 

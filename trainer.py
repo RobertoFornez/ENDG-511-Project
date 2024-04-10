@@ -13,11 +13,14 @@ from scipy.stats import entropy
 from getData import * 
 
 # Seed for reproducibility
-SEED = 25
+SEED = 120
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 
 class blHandler():
+# This class is used to handle all of the training and testing of models made with the blModel class.
+
+    
     def __init__(self, net, criterion, optimizer, device, scheduler=None, num_epochs=50, bestPath="./models/best_0420.pth"):
         self.net = net
         self.criterion = criterion
@@ -33,6 +36,8 @@ class blHandler():
               }
         
     def train(self, tLoader, vLoader=None):
+        #This function is used to train models made using the blModel class.
+        
         eStopThreshold, eStopCounter = 8, 0 
         best_loss, preValLoss = 100, 100
         
@@ -144,6 +149,8 @@ class blHandler():
 
 
 class eeHandler():
+# This class is used to handle all of the training and testing of early exitimg models that make use of more than one branch
+    
     def __init__(self, net, criterion, optimizer, device, nBranches=2, scheduler=None, num_epochs=5, bestPath="./Models/best_eev0.pth"):
         self.net = net
         self.criterion = criterion
@@ -160,6 +167,9 @@ class eeHandler():
         
         
     def train(self, tLoader, vLoader=None):
+        #this fucntion is used to train early exiting models, it utilizes the training algorithm proposed by the "Using Early Exits for Fast Inference in
+        # Automatic Modulation Classification" paper.
+        
         eStopThreshold, eStopCounter = 8, 0 
         best_loss, preValLoss = 100, 100
 
@@ -318,6 +328,10 @@ class eeHandler():
         return recorder, torch.FloatTensor(predicted), acc
     
     def forward_timeTest(self, sLoader, ratio=0.1):
+        # this function is used to perform inference time tests with the early exiting model, it divided up the test data using the ratio and sends one group through
+        # the early branch, and another though both the early and long branches.
+
+        
         self.net.eval()
         num_samples_to_select = int(ratio * 200)
         with torch.no_grad():
@@ -329,6 +343,9 @@ class eeHandler():
                 _ = self.net.long_forward(remaining_data)
 
     def testingSummary(self, recorder, nBranches=2, overall=True):
+        # this function is used to print the testing summary, this includes things like accuracy for each branch, the overall weighted accuracy, and the ratios of data that went
+        # through each branch.
+        
         print('Summary')
         print("======================")
         overallAcc, acc = 0, 0
