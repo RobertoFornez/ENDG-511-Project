@@ -319,7 +319,7 @@ class eeHandler():
     
     def forward_timeTest(self, sLoader, ratio=0.1):
         self.net.eval()
-        num_samples_to_select = int(ratio * 32)
+        num_samples_to_select = int(ratio * 200)
         with torch.no_grad():
             for inputs, _ in sLoader:
                 inputs = inputs.to(self.device)
@@ -343,3 +343,7 @@ class eeHandler():
             overallAcc += acc*countSamples
         if overall:
             print("Overall Weighted Accuracy: {:.2f}%".format(overallAcc/overallCount*100))   
+
+
+
+
